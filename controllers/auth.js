@@ -26,7 +26,7 @@ exports.signup = (req, res) => {
       subject: "ACCOUNT ACTIVATION LINK",
       html: `
                 <h1>Please use the following link to activate your account</h1>
-                <p>${process.env.CLIENT_URL}/auth/activate/${token}</p>
+                <p><a href="http://142.93.14.6/auth/activate/${token}" />LINK</p>
                 <p>This email may contain sensitive information</p>
             `,
     };
