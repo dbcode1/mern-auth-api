@@ -26,8 +26,7 @@ exports.signup = (req, res) => {
       subject: "ACCOUNT ACTIVATION LINK",
       html: `
                 <h1>Please use the following link to activate your account</h1>
-                <p><a href="http://142.93.14.6/auth/activate/${token}" />LINK</p>
-                <p>This email may contain sensitive information</p>
+                <a href="${process.env.CLIENT_URL}/auth/activate/${token}">Activation Link</a>                <p>This email may contain sensitive information</p>
             `,
     };
  
@@ -75,7 +74,7 @@ exports.accountActivation = (req, res) => {
 exports.signin = (req, res) => {
   const { email, password } = req.body;
   
-  
+  console.log(email, password)
   // check if user exist
   User.findOne({ email }).exec((err, user) => {
      
@@ -130,7 +129,7 @@ exports.adminMiddleware = (req, res, next) => {
 
 exports.forgotPassword = (req, res) => {
     const {email} = req.body
-
+    console.log(email)
     User.findOne({email}, (err, user) => {
         if(err || !user) {
             return res.status(400).json({
