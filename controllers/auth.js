@@ -26,7 +26,8 @@ exports.signup = (req, res) => {
       subject: "ACCOUNT ACTIVATION LINK",
       html: `
                 <h1>Please use the following link to activate your account</h1>
-                <a href="${process.env.CLIENT_URL}/auth/activate/${token}">Activation Link</a>                <p>This email may contain sensitive information</p>
+                <p><a href="http://142.93.14.6/auth/activate/${token}" />LINK</p>
+                <p>This email may contain sensitive information</p>
             `,
     };
  
@@ -129,7 +130,6 @@ exports.adminMiddleware = (req, res, next) => {
 
 exports.forgotPassword = (req, res) => {
     const {email} = req.body
-    console.log(email)
     User.findOne({email}, (err, user) => {
         if(err || !user) {
             return res.status(400).json({
@@ -149,7 +149,7 @@ exports.forgotPassword = (req, res) => {
             subject: "PASSWORD RESET LINK",
             html: `
                       <h1>Please use the following link to reset your password</h1>
-                      <a href="http://localhost:3000/auth/password/reset/${token}">http://localhost:8000/auth/activate/${token}</a>
+                      <a href="http://142.93.14.6/auth/password/reset/${token}">http://localhost:8000/auth/activate/${token}</a>
                       <hr />
                       <p>This email may contain sensitive information</p>
                       <p>http://localhost:3000</p>
