@@ -86,6 +86,7 @@ exports.metArtObjects = (response, searchTerm) => {
 
 exports.artsyArtObject = (data, searchTerm) => {
   // create new obj with desired fields
+  if(!data.data) { return}
   const allArtObjects = []
   const values = data.data._embedded.results
   values.map(item => {

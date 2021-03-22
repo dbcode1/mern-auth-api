@@ -37,3 +37,10 @@ exports.resetPasswordValidator = [
   .isLength({min: 6})
   .withMessage('Password of 6 characters min.'),
 ]
+
+exports.searchTerm = [
+  check()
+  .not()
+  .isEmpty()
+  .withMessage('Search term is blank')
+]

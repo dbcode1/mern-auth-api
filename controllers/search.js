@@ -8,19 +8,13 @@ http.getMaxRPS() // 2
 const getImages = require('../helpers/wiki')
 
 exports.search = async (req, res) => {
-
   const searchTerm = req.query.q
-
+  
   function harvard() { return axios.get(`https://api.harvardartmuseums.org/object?keyword=${searchTerm}&size=100&apikey=a27500b4-d744-4b0c-a9b5-cbf8989dc970`)}
 
   function urlRijk(){ return axios.get( `https://www.rijksmuseum.nl/api/en/collection?key=DwmWUAgf&q=${searchTerm}&ps=100&imgonly=True&toppieces=True` )}
 
   function urlCleveland(){ return axios.get(`https://openaccess-api.clevelandart.org/api/artworks/?artists=${searchTerm}&has_image&limit=50`)}
-
-  // TODO: work out wikipedia case sensitivity
-   // slow response
-   // stallin requests
-   // check if theres no results
 
   const artsy = () => {
     return axios({
@@ -32,12 +26,6 @@ exports.search = async (req, res) => {
       }
     })
   }
-
-
-
-    //console.log('token', item.data._embedded.results[0]._links)
-
-
 
   async function wiki(){
     try {
@@ -134,12 +122,11 @@ exports.search = async (req, res) => {
         const rijkArtRes = responses[1];
         const clevelandArtRes = responses[2];
         const artsyRes = responses[3]
-        
+    
         const harvardArtFormatted = harvardFormatter(harvardArtRes, searchTerm)
         const newRijkObjects = rijkArtObject(rijkArtRes, searchTerm)
         const newClevelandObjects = clevelandArtObject(clevelandArtRes, searchTerm)
         const newArtsyObjects = artsyArtObject(artsyRes, searchTerm)
-        console.log(newArtsyObjects)
 
         const rijHarClev = [...harvardArtFormatted, ...newRijkObjects,  ...newClevelandObjects, ...newArtsyObjects]
         return rijHarClev
