@@ -135,30 +135,67 @@ exports.getCards = async (req, res) => {
   })
 }
 
+exports.collectionDelete = async (req, res) => {
+  // get title from req
+  const {title, id} = req.body
+  console.log('req', req.body)
+  // lookup user with id
+  const user = User.findById({_id: id}, (err, user) => {
+    if( err || !user){
+      return res.status(400).json({
+        error: 'User not found'
+      })
+    } 
+    const deleted = user.collections.filter(obj => obj.title !== title)
+    user.collections = deleted;
+    user.save()
+    res.status(200).send(deleted)
+  })
+}
+
 exports.cardDelete = async (req, res) => {
   // get title from req
   const {id, containerTitle, title} = req.query
   console.log(containerTitle, id)
   
-  User.findById({_id: id}, (err, user) => {
+  const user = User.findById({_id: id}, (err, user) => {
     if( err || !user){
       return res.status(400).json({
         error: 'User not found'
       })
     }
-    
-    user.collections.map(group =>{
-      if(group.title === containerTitle){
-        const leftovers = []
-        group.cards.map(card => {
-          if(card.title !== title){
-            // collection.cards.slice(card, indexOf(card))
-            leftovers.push(card)
+
+    let leftovers = []
+    user.collections.forEach((obj, i) => {
+      if(obj.title === containerTitle) {
+        obj.cards.forEach(obj => {
+          if(obj.title !== title){
+            leftovers.push(obj)
           }
         })
-        group.cards = leftovers
+        
+        obj.cards.splice(0, obj.cards.length, ...leftovers)
+        console.log(obj.cards)
       }
+      
+      res.status(200)
     })
+
+
+
+
+
+
+
+    
+    // chosen[index].cards.map(obj => {
+    //   if(obj.title !== title) {
+    //     leftovers.push(obj)
+    //   }
+    // })
+    // chosen[index] = leftovers
+    
+   
     user.save()
     res.status(200).send(user.collections)
 
