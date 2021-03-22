@@ -2,7 +2,7 @@ const { inRange, _ } = require('lodash');
 const User = require('../models/user');
 const Card = require('../models/card')
 const Collection = require('../models/collection')
-const getUser = require('../helpers/getUser')
+const collection = require('../models/collection');
  
 exports.collectionSave = async (req, res) => {
   let title = req.query.q
@@ -78,12 +78,13 @@ exports.collectionDelete = async (req, res) => {
 exports.cardSave = async (req, res) => {
   const {title, img, name, date, containerTitle, id} = req.query
   ;
+  
   const card = {
     title,
     img,
     name,
     date,
-    containerTitle,
+    containerTitle: containerTitle,
   }
   
   const user = User.findOne({_id: id}, (err, user) => {
@@ -111,8 +112,9 @@ exports.cardSave = async (req, res) => {
 
 exports.getCards = async (req, res) => {
   const {id, title} = req.query
+
   const user = User.findOne({_id: id}, (err, user) => {
-    
+  console.log(user)
     if( err || !user){
       return res.status(400).json({
         error: 'No Art here'
@@ -131,4 +133,35 @@ exports.getCards = async (req, res) => {
     })
     res.status(200).send(collectionCards)
   })
+}
+
+exports.cardDelete = async (req, res) => {
+  // get title from req
+  const {id, containerTitle, title} = req.query
+  console.log(containerTitle, id)
+  
+  User.findById({_id: id}, (err, user) => {
+    if( err || !user){
+      return res.status(400).json({
+        error: 'User not found'
+      })
+    }
+    
+    user.collections.map(group =>{
+      if(group.title === containerTitle){
+        const leftovers = []
+        group.cards.map(card => {
+          if(card.title !== title){
+            // collection.cards.slice(card, indexOf(card))
+            leftovers.push(card)
+          }
+        })
+        group.cards = leftovers
+      }
+    })
+    user.save()
+    res.status(200).send(user.collections)
+
+  })
+ 
 }

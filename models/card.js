@@ -17,10 +17,10 @@ const CardSchema = new mongoose.Schema(
         name: { 
           type: String
         },
-        userId: {
-          type: String,
+        containerTitle:{
+          type: String
         }
-     
+
     },
     { timestamps: true }
 );

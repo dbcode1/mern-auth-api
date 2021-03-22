@@ -8,6 +8,7 @@ const {
   collectionSave, 
   collectionDelete,
   cardSave,
+  cardDelete,
   getCollections, 
   getCards,
   getCollectionTitles }
@@ -16,6 +17,7 @@ const {
 router.post('/collections', requireSignin, collectionSave)
 router.delete('/collections/delete', collectionDelete)
 router.post('/cards', cardSave)
+router.delete('/cards/delete', cardDelete)
 router.get('/cards', getCards)
 router.get('/collections', getCollections)
 router.get('/collections/titles', getCollectionTitles)

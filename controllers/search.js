@@ -5,7 +5,6 @@ const { reject, values, forEach } = require('lodash')
 const rateLimit = require('axios-rate-limit')
 const http = rateLimit(axios.create(), { maxRequests: 30, perMilliseconds: 1000, maxRPS: 60 })
 http.getMaxRPS() // 2
-const getImages = require('../helpers/wiki')
 
 exports.search = async (req, res) => {
   const searchTerm = req.query.q

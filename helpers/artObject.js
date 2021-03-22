@@ -86,16 +86,22 @@ exports.metArtObjects = (response, searchTerm) => {
 
 exports.artsyArtObject = (data, searchTerm) => {
   // create new obj with desired fields
-  if(!data.data) { return}
+  
   const allArtObjects = []
   const values = data.data._embedded.results
+ 
+  
   values.map(item => {
-    const img = item._links.thumbnail.href
-    const artObj = {
-      title: item.title.split(" ").splice(0, 6).join(" "),
-      img: img,
-    }
+    if(item._links.thumbnail) {
+      console.log(item._links)
+      const img = item._links.thumbnail.href
+      const artObj = {
+        title: item.title.split(" ").splice(0, 6).join(" "),
+        img: img,
+      }
+    
     allArtObjects.push(artObj)
+    }
   })
   return allArtObjects
 }
