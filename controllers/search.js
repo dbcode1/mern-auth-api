@@ -6,7 +6,20 @@ const rateLimit = require('axios-rate-limit')
 const http = rateLimit(axios.create(), { maxRequests: 30, perMilliseconds: 1000, maxRPS: 60 })
 http.getMaxRPS() // 2
 
+// // Refresh XAPP token
+// const artsyXapp = require('artsy-xapp');
+// artsyXapp.init({
+//   url: 'https://api.artsy.net', // defaults to process.env.ARTSY_URL
+//   id: '31f31ffds', // defaults to process.env.ARTSY_ID
+//   secret: '32rf1fds' // defaults to process.env.ARTSY_SECRET
+// }, function() {
+//   process.env.XAPP = artsyXapp.token
+// });
+
+//artsyXapp.on('error', process.exit);
+
 exports.search = async (req, res) => {
+
   const searchTerm = req.query.q
   
   function harvard() { return axios.get(`https://api.harvardartmuseums.org/object?keyword=${searchTerm}&size=100&apikey=a27500b4-d744-4b0c-a9b5-cbf8989dc970`)}
@@ -131,6 +144,7 @@ exports.search = async (req, res) => {
         return rijHarClev
     }))
    
+    console.log(moreArtObjects)
     artObjects = artObjects.concat(moreArtObjects, finalUrls)
     if(!artObjects || artObjects === 'undefined' || artObjects === null){
       res.status(400).json({message: "Sorry, no results"})
